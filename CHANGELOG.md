@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.4
+  Update README headline image
+
 ## 1.0.3
   Update icon
 

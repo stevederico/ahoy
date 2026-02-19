@@ -2,7 +2,7 @@
   "name": "ahoy",
   "displayName": "Ahoy",
   "description": "Auto-focus terminals when Claude needs input",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "stevederico",
   "license": "MIT",
   "icon": "icon.png",
