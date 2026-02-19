@@ -26,18 +26,11 @@ Ahoy tracks which terminal each Claude Code session is running in and automatica
 
 ### Install the Extension
 
-```bash
-code --install-extension ahoy-1.0.0.vsix
-```
-
-Or install from source:
+1. Download the latest `.vsix` from [GitHub Releases](https://github.com/stevederico/ahoy/releases/latest)
+2. Install it:
 
 ```bash
-cd ahoy
-npm install
-npm run compile
-npm run package
-code --install-extension ahoy-1.0.0.vsix
+code --install-extension ahoy-*.vsix
 ```
 
 ### Configure Claude Code Hooks
