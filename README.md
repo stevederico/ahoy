@@ -6,6 +6,8 @@
 
 A VS Code extension that focuses the correct terminal tab when Claude Code needs input.
 
+![ahoy-demo-3](https://github.com/user-attachments/assets/b8bfdc41-3dfd-4862-92c5-7813f69db7f6)
+
 ## The Problem
 
 When running multiple Claude Code sessions in different VS Code terminals, it's hard to know which terminal needs your attention. VS Code doesn't provide a way to programmatically highlight or focus a specific terminal tab.
