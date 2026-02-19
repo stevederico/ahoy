@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="icon.png" width="128" height="128" alt="Ahoy">
+</p>
+
 # Ahoy
 
 A VS Code extension that focuses the correct terminal tab when Claude Code needs input.
