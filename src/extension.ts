@@ -10,7 +10,7 @@ async function focusTerminalByPid(targetPid: number, notify: boolean): Promise<b
     for (const terminal of vscode.window.terminals) {
         const pid = await terminal.processId;
         if (pid === targetPid) {
-            terminal.show(true);
+            terminal.show(false);
             if (notify) {
                 vscode.window.showWarningMessage(`⚠️ Claude needs input in: ${terminal.name}`);
             }
@@ -26,7 +26,7 @@ async function focusTerminalByPid(targetPid: number, notify: boolean): Promise<b
 function focusTerminalByName(name: string, notify: boolean): boolean {
     const terminal = vscode.window.terminals.find(t => t.name === name);
     if (terminal) {
-        terminal.show(true);
+        terminal.show(false);
         if (notify) {
             vscode.window.showWarningMessage(`⚠️ Claude needs input in: ${terminal.name}`);
         }
@@ -42,7 +42,7 @@ function focusTerminalByIndex(index: number, notify: boolean): boolean {
     const terminals = vscode.window.terminals;
     if (index >= 1 && index <= terminals.length) {
         const terminal = terminals[index - 1];
-        terminal.show(true);
+        terminal.show(false);
         if (notify) {
             vscode.window.showWarningMessage(`⚠️ Claude needs input in: ${terminal.name}`);
         }
