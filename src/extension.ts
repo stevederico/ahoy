@@ -73,8 +73,25 @@ export function activate(context: vscode.ExtensionContext) {
                 const showNotify = notify && !silent;
 
                 if (content.startsWith('pid:')) {
-                    const pid = parseInt(content.slice(4), 10);
-                    if (!isNaN(pid)) await focusTerminalByPid(pid, showNotify);
+                    const pidStr = content.slice(4);
+                    // Support pid:12345:label:agentName format
+                    const labelMatch = pidStr.match(/^(\d+):label:(.+)$/);
+                    let pid: number;
+                    let agentLabel: string | undefined;
+                    if (labelMatch) {
+                        pid = parseInt(labelMatch[1], 10);
+                        agentLabel = labelMatch[2];
+                    } else {
+                        pid = parseInt(pidStr, 10);
+                    }
+                    if (!isNaN(pid)) {
+                        const focused = await focusTerminalByPid(pid, false);
+                        if (focused && showNotify && agentLabel) {
+                            vscode.window.showWarningMessage(`⚠️ ${agentLabel} needs input`);
+                        } else if (focused && showNotify) {
+                            vscode.window.showWarningMessage(`⚠️ Claude needs input`);
+                        }
+                    }
                 } else if (content.startsWith('index:')) {
                     const idx = parseInt(content.slice(6), 10);
                     if (!isNaN(idx)) focusTerminalByIndex(idx, showNotify);

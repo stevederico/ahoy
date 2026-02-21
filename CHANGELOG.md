@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.5
+  Show agent name in notification
+
 ## 1.0.4
   Update README headline image
 
