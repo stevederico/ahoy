@@ -13,12 +13,16 @@ label=${label//\'/}
 
 printf '\033]0;⚠️ %s\007' "$label" > /dev/tty 2>/dev/null
 
-# Source platform-specific focus handler
-case "$TERM_PROGRAM" in
-  Apple_Terminal) source ~/.claude/hooks/platforms/terminal.sh ;;
-  vscode)         source ~/.claude/hooks/platforms/vscode.sh ;;
-  iTerm.app)      source ~/.claude/hooks/platforms/iterm.sh ;;
-esac
+# Source platform-specific focus handler (tmux checked first — runs inside other terminals)
+if [ -n "$TMUX" ]; then
+  source ~/.claude/hooks/platforms/tmux.sh
+else
+  case "$TERM_PROGRAM" in
+    Apple_Terminal) source ~/.claude/hooks/platforms/terminal.sh ;;
+    vscode)         source ~/.claude/hooks/platforms/vscode.sh ;;
+    iTerm.app)      source ~/.claude/hooks/platforms/iterm.sh ;;
+  esac
+fi
 
 # TTS + sound (shared, all platforms)
 # Platform-specific tab focus (no-op if platform unknown)

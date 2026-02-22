@@ -56,7 +56,7 @@ done
 
 # ── Copy platform modules ────────────────────────────────────────
 
-for f in terminal.sh vscode.sh iterm.sh; do
+for f in terminal.sh vscode.sh iterm.sh tmux.sh; do
   cp "$SCRIPT_DIR/hooks/platforms/$f" "$PLATFORMS_DIR/$f"
   chmod +x "$PLATFORMS_DIR/$f"
   info "Installed hooks/platforms/$f"

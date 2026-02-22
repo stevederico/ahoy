@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0
+  Add tmux platform support
+  Add voice module source files
+  Rewrite README features section
+
 ## 1.4.0
   Strip voice dictation mode
   Listen-only tab focus

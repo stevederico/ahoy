@@ -8,30 +8,29 @@ Auto-focus terminal tabs across multi-agent Claude Code sessions. When an agent 
 
 ![ahoy-demo-3](https://github.com/user-attachments/assets/b8bfdc41-3dfd-4862-92c5-7813f69db7f6)
 
-## The Problem
+## Features
 
-Running multiple Claude Code sessions means juggling terminal tabs. When one agent pauses for permission, you're left hunting for which tab needs attention.
-
-## The Solution
-
-Ahoy gives each session a unique agent name, shows emoji states in tab titles, and auto-focuses the correct tab when Claude needs input.
+- **Agent names** — each session gets a unique name (Monte, Bill, Mel, ...)
+- **Tab states** — emoji prefixes show what each agent is doing: 🔨 working, ⚠️ needs input, ✅ done
+- **Auto-focus** — permission prompts bring the correct tab to front
+- **Voice & sound alerts** — (optional) TTS speaks the agent name, Tink sound on prompts
 
 ## Terminal Compatibility
 
-| Feature | Terminal.app | iTerm2 | VS Code |
-|---------|:---:|:---:|:---:|
-| Agent names | Yes | Yes | Yes |
-| Emoji tab states (🔨 ⚠️ ✅) | Yes | Yes | Yes |
-| Voice & sound alerts | Yes | Yes | Yes |
-| Auto-focus on permission prompt | AppleScript | AppleScript | Ahoy extension |
+| Feature | Terminal.app | iTerm2 | tmux | VS Code |
+|---------|:---:|:---:|:---:|:---:|
+| Agent names | Yes | Yes | Yes | Yes |
+| Emoji tab states (🔨 ⚠️ ✅) | Yes | Yes | Yes | Yes |
+| Voice & sound alerts | Yes | Yes | Yes | Yes |
+| Auto-focus on permission prompt | AppleScript | AppleScript | tmux select-pane | Ahoy extension |
 
-Agent names, emoji states, and TTS work everywhere — they use standard escape sequences and macOS built-ins. Auto-focus is platform-specific: Terminal.app and iTerm2 use AppleScript to locate and select the matching tab; VS Code uses the Ahoy extension to focus the correct terminal panel.
+Agent names, emoji states, and TTS work everywhere — they use standard escape sequences and macOS built-ins. Auto-focus is platform-specific: Terminal.app and iTerm2 use AppleScript, tmux uses `select-window`/`select-pane`, and VS Code uses the Ahoy extension.
 
 ## How It Works
 
 1. **SessionStart hook** assigns a unique agent name and sets the terminal title
 2. **Notification hook** triggers when Claude needs input — plays a sound, speaks the agent name, and auto-focuses the tab
-3. **Platform handlers** do the focus: AppleScript for Terminal.app/iTerm2, file-watch for VS Code
+3. **Platform handlers** do the focus: AppleScript for Terminal.app/iTerm2, pane selection for tmux, file-watch for VS Code
 
 ## Installation
 
@@ -75,7 +74,7 @@ Download the latest `.vsix` from [GitHub Releases](https://github.com/stevederic
 code --install-extension ahoy-*.vsix
 ```
 
-Terminal.app and iTerm2 users do **not** need the extension — auto-focus works via AppleScript.
+Terminal.app, iTerm2, and tmux users do **not** need the extension — auto-focus works natively.
 
 ### Manual Hook Setup
 

@@ -64,12 +64,16 @@ label=$(cat "/tmp/claude_name_${sid}")
 # Set terminal title
 printf '\033]0;%s\007' "$label" > /dev/tty 2>/dev/null
 
-# Platform-specific init (e.g., PID capture for VS Code Ahoy extension)
-case "$TERM_PROGRAM" in
-  Apple_Terminal) source ~/.claude/hooks/platforms/terminal.sh ;;
-  vscode)         source ~/.claude/hooks/platforms/vscode.sh ;;
-  iTerm.app)      source ~/.claude/hooks/platforms/iterm.sh ;;
-esac
+# Platform-specific init (tmux checked first — runs inside other terminals)
+if [ -n "$TMUX" ]; then
+  source ~/.claude/hooks/platforms/tmux.sh
+else
+  case "$TERM_PROGRAM" in
+    Apple_Terminal) source ~/.claude/hooks/platforms/terminal.sh ;;
+    vscode)         source ~/.claude/hooks/platforms/vscode.sh ;;
+    iTerm.app)      source ~/.claude/hooks/platforms/iterm.sh ;;
+  esac
+fi
 if type platform_init &>/dev/null; then
   platform_init "$sid"
 fi
