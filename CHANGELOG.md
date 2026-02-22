@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0
+  Add terminal hook system
+  Add setup and uninstall scripts
+  Rewrite installation docs
+
 ## 1.0.5
   Show agent name in notification
 

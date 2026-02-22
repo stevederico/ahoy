@@ -24,18 +24,49 @@ Ahoy tracks which terminal each Claude Code session is running in and automatica
 
 ## Installation
 
-### Install the Extension
+### 1. Install the Extension
 
-1. Download the latest `.vsix` from [GitHub Releases](https://github.com/stevederico/ahoy/releases/latest)
-2. Install it:
+Download the latest `.vsix` from [GitHub Releases](https://github.com/stevederico/ahoy/releases/latest) and install:
 
 ```bash
 code --install-extension ahoy-*.vsix
 ```
 
-### Configure Claude Code Hooks
+### 2. Install the Terminal Hooks
 
-Add these hooks to `~/.claude/settings.json`:
+The `terminal/` folder includes a full hook system that gives each Claude Code session a unique agent name, emoji tab states, and auto-focus. Run the setup script:
+
+```bash
+git clone https://github.com/stevederico/ahoy
+bash ahoy/terminal/setup.sh
+```
+
+The setup will ask if you want voice & sound alerts:
+
+```
+  Voice & sound alerts play audio when agents need attention.
+  Examples: "Hi, I'm Monte", "Monte completed fix login bug"
+
+  Enable voice & sound alerts? (y/n)
+```
+
+You can rerun `setup.sh` anytime to change your settings.
+
+**What gets installed:**
+
+| Feature | Description |
+|---------|-------------|
+| Agent names | Each session gets a unique name (Monte, Bill, Mel, ...) |
+| Tab states | 🔨 working, ⚠️ needs input, ✅ done |
+| Auto-focus | Permission prompts focus the correct terminal tab |
+| Voice alerts | (optional) TTS speaks agent name and task completion |
+| Sound alerts | (optional) Tink sound on permission prompts |
+
+**Works in both Terminal.app and VS Code.** In Terminal.app, focus uses AppleScript. In VS Code, focus uses the Ahoy extension.
+
+### Manual Hook Setup
+
+If you prefer to configure hooks manually instead of using the setup script, add these to `~/.claude/settings.json`:
 
 ```json
 {
@@ -75,6 +106,8 @@ Add these hooks to `~/.claude/settings.json`:
 }
 ```
 
+This is the minimal setup — just PID capture and focus, no agent names or TTS.
+
 ## Usage
 
 Once installed, Ahoy works automatically:
@@ -87,52 +120,13 @@ Once installed, Ahoy works automatically:
 
 Command Palette → **Ahoy: Focus Terminal** to manually select a terminal.
 
-### Optional: Add Sound and Voice (macOS)
+## Uninstall
 
-Want audio alerts? Here are the hooks with sound and voice:
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cat > /tmp/claude_start_$$; (cwd=$(jq -r .cwd < /tmp/claude_start_$$); sid=$(jq -r .session_id < /tmp/claude_start_$$); termpid=$(ps -o ppid= -p $PPID | tr -d ' '); echo \"pid:$termpid\" > /tmp/claude_term_pid_${sid}; say \"$(basename \"$cwd\")\"; rm /tmp/claude_start_$$) &"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "permission_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cat > /tmp/claude_hook_$$; cwd=$(jq -r .cwd < /tmp/claude_hook_$$); sid=$(jq -r .session_id < /tmp/claude_hook_$$); (if [ -f /tmp/claude_term_pid_${sid} ]; then cat /tmp/claude_term_pid_${sid} > /tmp/claude-terminal-focus; fi; afplay /System/Library/Sounds/Tink.aiff & say \"$(basename \"$cwd\")\"; rm /tmp/claude_hook_$$) &"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cat > /tmp/claude_stop_$$; cwd=$(jq -r .cwd < /tmp/claude_stop_$$); sid=$(jq -r .session_id < /tmp/claude_stop_$$); (if [ -f /tmp/claude_term_pid_${sid} ]; then cat /tmp/claude_term_pid_${sid} > /tmp/claude-terminal-focus; fi; say \"$(basename \"$cwd\") done\"; rm /tmp/claude_stop_$$) &"
-          }
-        ]
-      }
-    ]
-  }
-}
+```bash
+bash ahoy/terminal/uninstall.sh
 ```
 
-**What you get:**
-- **SessionStart**: Voice says project name
-- **Notification**: Tink sound + voice says project name
-- **Stop**: Voice says "[project] done"
+This removes all hooks, restores any backups, and cleans up temp files.
 
 ## API
 
@@ -150,13 +144,15 @@ echo "index:3" > /tmp/claude-terminal-focus
 
 # Focus with VS Code notification toast
 echo "pid:12345:notify" > /tmp/claude-terminal-focus
+
+# Focus with agent label and notification
+echo "pid:12345:label:Monte:notify" > /tmp/claude-terminal-focus
 ```
 
 ## Requirements
 
+- macOS
 - VS Code 1.85.0+
-- macOS (uses `ps` command for PID lookup)
-- `jq` installed (`brew install jq`)
 
 ## License
 
