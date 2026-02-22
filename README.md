@@ -4,37 +4,40 @@
 
 # Ahoy
 
-A VS Code extension that focuses the correct terminal tab when Claude Code needs input.
+Auto-focus terminal tabs across multi-agent Claude Code sessions. When an agent needs input, Ahoy finds the right tab and brings it to you.
 
 ![ahoy-demo-3](https://github.com/user-attachments/assets/b8bfdc41-3dfd-4862-92c5-7813f69db7f6)
 
 ## The Problem
 
-When running multiple Claude Code sessions in different VS Code terminals, it's hard to know which terminal needs your attention. VS Code doesn't provide a way to programmatically highlight or focus a specific terminal tab.
+Running multiple Claude Code sessions means juggling terminal tabs. When one agent pauses for permission, you're left hunting for which tab needs attention.
 
 ## The Solution
 
-Ahoy tracks which terminal each Claude Code session is running in and automatically focuses that terminal when Claude needs input.
+Ahoy gives each session a unique agent name, shows emoji states in tab titles, and auto-focuses the correct tab when Claude needs input.
+
+## Terminal Compatibility
+
+| Feature | Terminal.app | iTerm2 | VS Code |
+|---------|:---:|:---:|:---:|
+| Agent names | Yes | Yes | Yes |
+| Emoji tab states (🔨 ⚠️ ✅) | Yes | Yes | Yes |
+| Voice & sound alerts | Yes | Yes | Yes |
+| Auto-focus on permission prompt | AppleScript | AppleScript | Ahoy extension |
+
+Agent names, emoji states, and TTS work everywhere — they use standard escape sequences and macOS built-ins. Auto-focus is platform-specific: Terminal.app and iTerm2 use AppleScript to locate and select the matching tab; VS Code uses the Ahoy extension to focus the correct terminal panel.
 
 ## How It Works
 
-1. **SessionStart hook** captures the terminal's shell PID when you start a Claude Code session
-2. **Notification hook** writes the PID to a watch file when Claude needs input
-3. **Ahoy extension** watches the file and focuses the matching terminal
+1. **SessionStart hook** assigns a unique agent name and sets the terminal title
+2. **Notification hook** triggers when Claude needs input — plays a sound, speaks the agent name, and auto-focuses the tab
+3. **Platform handlers** do the focus: AppleScript for Terminal.app/iTerm2, file-watch for VS Code
 
 ## Installation
 
-### 1. Install the Extension
+### 1. Install the Terminal Hooks
 
-Download the latest `.vsix` from [GitHub Releases](https://github.com/stevederico/ahoy/releases/latest) and install:
-
-```bash
-code --install-extension ahoy-*.vsix
-```
-
-### 2. Install the Terminal Hooks
-
-The `terminal/` folder includes a full hook system that gives each Claude Code session a unique agent name, emoji tab states, and auto-focus. Run the setup script:
+The `terminal/` folder includes the full hook system — agent names, emoji tab states, TTS, and auto-focus. Run the setup script:
 
 ```bash
 git clone https://github.com/stevederico/ahoy
@@ -62,7 +65,17 @@ You can rerun `setup.sh` anytime to change your settings.
 | Voice alerts | (optional) TTS speaks agent name and task completion |
 | Sound alerts | (optional) Tink sound on permission prompts |
 
-**Works in both Terminal.app and VS Code.** In Terminal.app, focus uses AppleScript. In VS Code, focus uses the Ahoy extension.
+### 2. VS Code Only: Install the Extension
+
+If you use VS Code, also install the Ahoy extension for terminal auto-focus:
+
+Download the latest `.vsix` from [GitHub Releases](https://github.com/stevederico/ahoy/releases/latest) and install:
+
+```bash
+code --install-extension ahoy-*.vsix
+```
+
+Terminal.app and iTerm2 users do **not** need the extension — auto-focus works via AppleScript.
 
 ### Manual Hook Setup
 
@@ -112,11 +125,11 @@ This is the minimal setup — just PID capture and focus, no agent names or TTS.
 
 Once installed, Ahoy works automatically:
 
-1. Open multiple terminals in VS Code
-2. Start Claude Code sessions in different terminals
-3. When Claude needs input, that terminal automatically focuses
+1. Open multiple terminal tabs (or VS Code terminals)
+2. Start Claude Code sessions in different tabs
+3. When Claude needs input, that tab automatically focuses
 
-### Manual Focus
+### Manual Focus (VS Code)
 
 Command Palette → **Ahoy: Focus Terminal** to manually select a terminal.
 
@@ -152,7 +165,6 @@ echo "pid:12345:label:Monte:notify" > /tmp/claude-terminal-focus
 ## Requirements
 
 - macOS
-- VS Code 1.85.0+
 
 ## License
 

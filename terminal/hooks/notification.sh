@@ -17,6 +17,7 @@ printf '\033]0;⚠️ %s\007' "$label" > /dev/tty 2>/dev/null
 case "$TERM_PROGRAM" in
   Apple_Terminal) source ~/.claude/hooks/platforms/terminal.sh ;;
   vscode)         source ~/.claude/hooks/platforms/vscode.sh ;;
+  iTerm.app)      source ~/.claude/hooks/platforms/iterm.sh ;;
 esac
 
 # TTS + sound (shared, all platforms)

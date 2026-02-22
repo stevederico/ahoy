@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+  Add iTerm2 auto-focus
+  Update README compatibility docs
+
 ## 1.1.0
   Add terminal hook system
   Add setup and uninstall scripts

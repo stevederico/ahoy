@@ -56,7 +56,7 @@ done
 
 # ── Copy platform modules ────────────────────────────────────────
 
-for f in terminal.sh vscode.sh; do
+for f in terminal.sh vscode.sh iterm.sh; do
   cp "$SCRIPT_DIR/hooks/platforms/$f" "$PLATFORMS_DIR/$f"
   chmod +x "$PLATFORMS_DIR/$f"
   info "Installed hooks/platforms/$f"
@@ -128,7 +128,7 @@ echo "    • Sound effect on permission prompts"
 fi
 echo "    • Terminal tabs show state: 🔨 working, ⚠️ needs input, ✅ done"
 echo "    • Permission prompts auto-focus the correct tab"
-echo "    • Works in Terminal.app and VS Code (with Ahoy extension)"
+echo "    • Works in Terminal.app, iTerm2, and VS Code (with Ahoy extension)"
 echo ""
 echo "  To change settings, rerun: bash $(dirname "$0")/setup.sh"
 echo "  To uninstall: bash $(dirname "$0")/uninstall.sh"
