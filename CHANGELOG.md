@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0
+  Strip voice dictation mode
+  Listen-only tab focus
+
 ## 1.2.0
   Add iTerm2 auto-focus
   Update README compatibility docs
