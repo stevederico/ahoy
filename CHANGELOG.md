@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.1
+  Add customization docs to README
+  Move architecture docs to docs/
+  Remove ahoy-terminal.md
+
 ## 1.5.0
   Add tmux platform support
   Add voice module source files

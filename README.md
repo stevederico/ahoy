@@ -132,6 +132,25 @@ Once installed, Ahoy works automatically:
 
 Command Palette → **Ahoy: Focus Terminal** to manually select a terminal.
 
+## Customization
+
+### Agent Names
+
+Names are stored one per line in `~/.claude/agent-names.txt`. To add names, append to the file. To remove, delete the line. Active sessions keep their name until they end regardless of pool changes.
+
+### Terminal Title Conflict
+
+Add `"env": { "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1" }` to your `~/.claude/settings.json` to prevent Claude Code's built-in title management from conflicting with the hooks. The setup script does this automatically.
+
+### Adding a New Platform
+
+Create `~/.claude/hooks/platforms/<name>.sh` exporting two functions:
+
+- **`platform_init`** `$sid` — called once at session start (e.g., capture PID, register watcher)
+- **`platform_focus`** `$label` `$sid` — called on permission prompts to bring the tab to front
+
+Then add a case to the `$TERM_PROGRAM` switch in `notification.sh` and `session-start.sh`.
+
 ## Uninstall
 
 ```bash
