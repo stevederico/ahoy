@@ -146,6 +146,16 @@ Command Palette → **Ahoy: Focus Terminal** to manually select a terminal.
 
 Names are stored one per line in `~/.claude/agent-names.txt`. To add names, append to the file. To remove, delete the line. Active sessions keep their name until they end regardless of pool changes.
 
+### Audio Toggle
+
+Toggle voice and sound alerts without re-running setup:
+
+```bash
+bash ahoy/terminal/audio.sh off   # disable TTS and sounds
+bash ahoy/terminal/audio.sh on    # re-enable
+bash ahoy/terminal/audio.sh       # interactive — shows current state and prompts
+```
+
 ### Terminal Title Conflict
 
 Add `"env": { "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1" }` to your `~/.claude/settings.json` to prevent the coding agent's built-in title management from conflicting with the hooks. The setup script does this automatically.

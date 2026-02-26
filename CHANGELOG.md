@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.2
+  Add audio toggle script
+
 ## 1.6.1
   Generalize README language
 
