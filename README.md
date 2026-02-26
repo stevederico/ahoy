@@ -150,11 +150,13 @@ Names are stored one per line in `~/.claude/agent-names.txt`. To add names, appe
 
 Toggle voice and sound alerts without re-running setup:
 
-```bash
-bash ahoy/terminal/audio.sh off   # disable TTS and sounds
-bash ahoy/terminal/audio.sh on    # re-enable
-bash ahoy/terminal/audio.sh       # interactive — shows current state and prompts
-```
+| Command | What it does |
+|---------|-------------|
+| `bash ahoy/terminal/audio.sh off` | Mute — disables TTS and sound effects |
+| `bash ahoy/terminal/audio.sh on` | Unmute — re-enables TTS and sound effects |
+| `bash ahoy/terminal/audio.sh` | Interactive — detects whether audio is currently on or off, shows the status, and prompts you to toggle it |
+
+Changes take effect on the next hook trigger — no restart needed.
 
 ### Terminal Title Conflict
 

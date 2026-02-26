@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.3
+  Clarify audio toggle docs
+
 ## 1.6.2
   Add audio toggle script
 
