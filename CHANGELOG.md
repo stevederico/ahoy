@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.2
+  Clarify README quick start
+  Add requirements section
+  Simplify platform setup docs
+
 ## 1.5.1
   Add customization docs to README
   Move architecture docs to docs/

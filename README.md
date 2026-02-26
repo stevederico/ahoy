@@ -32,49 +32,42 @@ Agent names, emoji states, and TTS work everywhere — they use standard escape 
 2. **Notification hook** triggers when Claude needs input — plays a sound, speaks the agent name, and auto-focuses the tab
 3. **Platform handlers** do the focus: AppleScript for Terminal.app/iTerm2, pane selection for tmux, file-watch for VS Code
 
-## Installation
+## Requirements
 
-### 1. Install the Terminal Hooks
+- macOS (uses `say`, `afplay`, `osascript`)
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed
 
-The `terminal/` folder includes the full hook system — agent names, emoji tab states, TTS, and auto-focus. Run the setup script:
+## Quick Start
+
+Two commands — works with Terminal.app, iTerm2, and tmux out of the box:
 
 ```bash
 git clone https://github.com/stevederico/ahoy
 bash ahoy/terminal/setup.sh
 ```
 
-The setup will ask if you want voice & sound alerts:
+Start a new Claude Code session and you're good to go. Open multiple tabs, run agents in each, and Ahoy handles the rest.
 
-```
-  Voice & sound alerts play audio when agents need attention.
-  Examples: "Hi, I'm Monte", "Monte completed fix login bug"
+### What the Setup Script Does
 
-  Enable voice & sound alerts? (y/n)
-```
+1. Copies hook scripts to `~/.claude/hooks/`
+2. Installs platform adapters for Terminal.app, iTerm2, tmux, and VS Code
+3. Adds agent name pool to `~/.claude/agent-names.txt`
+4. Merges hook config into `~/.claude/settings.json`
+5. Disables Claude Code's built-in title management (prevents conflicts)
+6. Asks if you want voice & sound alerts (optional)
 
 You can rerun `setup.sh` anytime to change your settings.
 
-**What gets installed:**
+### VS Code Users
 
-| Feature | Description |
-|---------|-------------|
-| Agent names | Each session gets a unique name (Monte, Bill, Mel, ...) |
-| Tab states | 🔨 working, ⚠️ needs input, ✅ done |
-| Auto-focus | Permission prompts focus the correct terminal tab |
-| Voice alerts | (optional) TTS speaks agent name and task completion |
-| Sound alerts | (optional) Tink sound on permission prompts |
+Terminal.app, iTerm2, and tmux work out of the box — no extra setup.
 
-### 2. VS Code Only: Install the Extension
-
-If you use VS Code, also install the Ahoy extension for terminal auto-focus:
-
-Download the latest `.vsix` from [GitHub Releases](https://github.com/stevederico/ahoy/releases/latest) and install:
+VS Code requires the Ahoy extension for auto-focus. Download the latest `.vsix` from [GitHub Releases](https://github.com/stevederico/ahoy/releases/latest) and install:
 
 ```bash
 code --install-extension ahoy-*.vsix
 ```
-
-Terminal.app, iTerm2, and tmux users do **not** need the extension — auto-focus works natively.
 
 ### Manual Hook Setup
 
@@ -179,10 +172,6 @@ echo "pid:12345:notify" > /tmp/claude-terminal-focus
 # Focus with agent label and notification
 echo "pid:12345:label:Monte:notify" > /tmp/claude-terminal-focus
 ```
-
-## Requirements
-
-- macOS
 
 ## License
 
