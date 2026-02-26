@@ -4,7 +4,7 @@
 
 # Ahoy
 
-Auto-focus terminal tabs across multi-agent Claude Code sessions. When an agent needs input, Ahoy finds the right tab and brings it to you.
+Auto-focus terminal tabs across multi-agent coding sessions. When an agent needs input, Ahoy finds the right tab and brings it to you.
 
 ![ahoy-demo-3](https://github.com/user-attachments/assets/b8bfdc41-3dfd-4862-92c5-7813f69db7f6)
 
@@ -35,7 +35,7 @@ Agent names, emoji states, and TTS work everywhere — they use standard escape 
 ## Requirements
 
 - macOS (uses `say`, `afplay`, `osascript`)
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI or [OpenCode](https://opencode.ai) installed
+- A coding agent: [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [OpenCode](https://opencode.ai)
 
 ## Quick Start
 
@@ -69,7 +69,7 @@ The setup script installs the shell hooks to `~/.claude/hooks/` (shared with Cla
 2. Installs platform adapters for Terminal.app, iTerm2, tmux, and VS Code
 3. Adds agent name pool to `~/.claude/agent-names.txt`
 4. Merges hook config into `~/.claude/settings.json`
-5. Disables Claude Code's built-in title management (prevents conflicts)
+5. Disables the coding agent's built-in title management (prevents conflicts)
 6. Asks if you want voice & sound alerts (optional)
 
 You can rerun `setup.sh` anytime to change your settings.
@@ -133,7 +133,7 @@ This is the minimal setup — just PID capture and focus, no agent names or TTS.
 Once installed, Ahoy works automatically:
 
 1. Open multiple terminal tabs (or VS Code terminals)
-2. Start Claude Code sessions in different tabs
+2. Start coding agent sessions in different tabs
 3. When Claude needs input, that tab automatically focuses
 
 ### Manual Focus (VS Code)
@@ -148,7 +148,7 @@ Names are stored one per line in `~/.claude/agent-names.txt`. To add names, appe
 
 ### Terminal Title Conflict
 
-Add `"env": { "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1" }` to your `~/.claude/settings.json` to prevent Claude Code's built-in title management from conflicting with the hooks. The setup script does this automatically.
+Add `"env": { "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1" }` to your `~/.claude/settings.json` to prevent the coding agent's built-in title management from conflicting with the hooks. The setup script does this automatically.
 
 ### Adding a New Platform
 

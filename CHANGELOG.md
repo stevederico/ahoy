@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.1
+  Generalize README language
+
 ## 1.6.0
   Add OpenCode plugin support
   Add OpenCode setup script
