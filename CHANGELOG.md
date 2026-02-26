@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.0
+  Add OpenCode plugin support
+  Add OpenCode setup script
+  Add OpenCode uninstall script
+
 ## 1.5.2
   Clarify README quick start
   Add requirements section

@@ -35,9 +35,11 @@ Agent names, emoji states, and TTS work everywhere — they use standard escape 
 ## Requirements
 
 - macOS (uses `say`, `afplay`, `osascript`)
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI or [OpenCode](https://opencode.ai) installed
 
 ## Quick Start
+
+### Claude Code
 
 Two commands — works with Terminal.app, iTerm2, and tmux out of the box:
 
@@ -47,6 +49,19 @@ bash ahoy/terminal/setup.sh
 ```
 
 Start a new Claude Code session and you're good to go. Open multiple tabs, run agents in each, and Ahoy handles the rest.
+
+### OpenCode
+
+Same two-command pattern — reuses the same shell hooks:
+
+```bash
+git clone https://github.com/stevederico/ahoy
+bash ahoy/opencode/setup.sh
+```
+
+The setup script installs the shell hooks to `~/.claude/hooks/` (shared with Claude Code) and copies the OpenCode plugin to `~/.config/opencode/plugins/ahoy.js`. OpenCode discovers plugins by filesystem — no config merge needed.
+
+**Note:** OpenCode has no `UserPromptSubmit` equivalent, so TTS completion will say "completed task" instead of echoing the prompt text. All other features work identically.
 
 ### What the Setup Script Does
 
@@ -146,11 +161,21 @@ Then add a case to the `$TERM_PROGRAM` switch in `notification.sh` and `session-
 
 ## Uninstall
 
+### Claude Code
+
 ```bash
 bash ahoy/terminal/uninstall.sh
 ```
 
 This removes all hooks, restores any backups, and cleans up temp files.
+
+### OpenCode
+
+```bash
+bash ahoy/opencode/uninstall.sh
+```
+
+This removes the OpenCode plugin only. Shell hooks in `~/.claude/hooks/` are left in place for Claude Code.
 
 ## API
 
