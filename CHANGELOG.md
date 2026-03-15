@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.4
+  Set tmux pane title on init
+
 ## 1.6.3
   Clarify audio toggle docs
 
