@@ -11,6 +11,7 @@ platform_init() {
   pane_id=$(tmux display-message -p '#{pane_id}' 2>/dev/null)
   if [ -n "$pane_id" ]; then
     echo "$pane_id" > "/tmp/claude_tmux_pane_${sid}"
+    tmux select-pane -t "$pane_id" -T "$label" 2>/dev/null
   fi
 }
 
