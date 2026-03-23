@@ -12,6 +12,8 @@ platform_init() {
   if [ -n "$pane_id" ]; then
     echo "$pane_id" > "/tmp/claude_tmux_pane_${sid}"
     tmux select-pane -t "$pane_id" -T "$label" 2>/dev/null
+    tmux rename-window -t "$pane_id" "$label" 2>/dev/null
+    tmux set-option -w -t "$pane_id" automatic-rename off 2>/dev/null
   fi
 }
 

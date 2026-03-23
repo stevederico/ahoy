@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.5
+  Fix tmux window naming
+
 ## 1.6.4
   Set tmux pane title on init
 
