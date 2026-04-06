@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.1
+  Add hello to README
+
 ## 1.7.0
   Rewrite README structure
   Document all six hooks
