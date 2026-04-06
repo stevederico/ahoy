@@ -9,4 +9,4 @@ label=${name:-$(basename "$cwd")}
 
 printf '\033]0;✅ %s\007' "$label" > /dev/tty 2>/dev/null
 (task=$(cat "/tmp/claude_prompt_${sid}" 2>/dev/null); task=${task:0:40}
-say "$label completed ${task:-task}") &
+say "$label completed ${task:-task}") </dev/null >/dev/null 2>&1 &

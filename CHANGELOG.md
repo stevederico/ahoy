@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.2
+  Fix stop hook fd leak
+
 ## 1.7.1
   Add hello to README
 

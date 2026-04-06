@@ -29,4 +29,4 @@ fi
 (if type platform_focus &>/dev/null; then
   platform_focus "$label" "$sid"
 fi
-afplay /System/Library/Sounds/Tink.aiff & say "$label") &
+afplay /System/Library/Sounds/Tink.aiff & say "$label") </dev/null >/dev/null 2>&1 &
