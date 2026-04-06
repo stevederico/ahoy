@@ -1,11 +1,10 @@
-<div align="center">
-  <img src="icon.png" alt="Ahoy" width="60" height="60">
+<p align="center">
+  <img src="headline.jpg" alt="Ahoy">
+</p>
 
-  # Ahoy
+# Ahoy
 
-  ### auto-focus terminal tabs across multi-agent coding sessions
-
-</div>
+### auto-focus terminal tabs across multi-agent coding sessions
 
 <br />
 
