@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.0
+  Rewrite README structure
+  Document all six hooks
+
 ## 1.6.5
   Fix tmux window naming
 

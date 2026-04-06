@@ -1,41 +1,17 @@
-<p align="center">
-  <img src="headline.jpg" alt="Ahoy">
-</p>
+<div align="center">
+  <img src="icon.png" alt="Ahoy" width="60" height="60">
 
-# Ahoy
+  # Ahoy
 
-Auto-focus terminal tabs across multi-agent coding sessions. When an agent needs input, Ahoy finds the right tab and brings it to you.
+  ### auto-focus terminal tabs across multi-agent coding sessions
+
+</div>
+
+<br />
 
 ![ahoy-demo-3](https://github.com/user-attachments/assets/b8bfdc41-3dfd-4862-92c5-7813f69db7f6)
 
-## Features
-
-- **Agent names** — each session gets a unique name (Monte, Bill, Mel, ...)
-- **Tab states** — emoji prefixes show what each agent is doing: 🔨 working, ⚠️ needs input, ✅ done
-- **Auto-focus** — permission prompts bring the correct tab to front
-- **Voice & sound alerts** — (optional) TTS speaks the agent name, Tink sound on prompts
-
-## Terminal Compatibility
-
-| Feature | Terminal.app | iTerm2 | tmux | VS Code |
-|---------|:---:|:---:|:---:|:---:|
-| Agent names | Yes | Yes | Yes | Yes |
-| Emoji tab states (🔨 ⚠️ ✅) | Yes | Yes | Yes | Yes |
-| Voice & sound alerts | Yes | Yes | Yes | Yes |
-| Auto-focus on permission prompt | AppleScript | AppleScript | tmux select-pane | Ahoy extension |
-
-Agent names, emoji states, and TTS work everywhere — they use standard escape sequences and macOS built-ins. Auto-focus is platform-specific: Terminal.app and iTerm2 use AppleScript, tmux uses `select-window`/`select-pane`, and VS Code uses the Ahoy extension.
-
-## How It Works
-
-1. **SessionStart hook** assigns a unique agent name and sets the terminal title
-2. **Notification hook** triggers when Claude needs input — plays a sound, speaks the agent name, and auto-focuses the tab
-3. **Platform handlers** do the focus: AppleScript for Terminal.app/iTerm2, pane selection for tmux, file-watch for VS Code
-
-## Requirements
-
-- macOS (uses `say`, `afplay`, `osascript`)
-- A coding agent: [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [OpenCode](https://opencode.ai)
+<br />
 
 ## Quick Start
 
@@ -63,7 +39,55 @@ The setup script installs the shell hooks to `~/.claude/hooks/` (shared with Cla
 
 **Note:** OpenCode has no `UserPromptSubmit` equivalent, so TTS completion will say "completed task" instead of echoing the prompt text. All other features work identically.
 
-### What the Setup Script Does
+<br />
+
+## Features
+
+- **Agent names** — each session gets a unique name (Monte, Bill, Mel, ...)
+- **Tab states** — emoji prefixes show what each agent is doing: working, needs input, done
+- **Auto-focus** — permission prompts bring the correct tab to front
+- **Voice & sound alerts** — (optional) TTS speaks the agent name, Tink sound on prompts
+
+<br />
+
+## Terminal Compatibility
+
+| Feature | Terminal.app | iTerm2 | tmux | VS Code |
+|---------|:---:|:---:|:---:|:---:|
+| Agent names | Yes | Yes | Yes | Yes |
+| Emoji tab states | Yes | Yes | Yes | Yes |
+| Voice & sound alerts | Yes | Yes | Yes | Yes |
+| Auto-focus on permission prompt | AppleScript | AppleScript | tmux select-pane | Ahoy extension |
+
+Agent names, emoji states, and TTS work everywhere — they use standard escape sequences and macOS built-ins. Auto-focus is platform-specific: Terminal.app and iTerm2 use AppleScript, tmux uses `select-window`/`select-pane`, and VS Code uses the Ahoy extension.
+
+<br />
+
+## How It Works
+
+Ahoy uses six hooks that fire at different points in the agent lifecycle:
+
+| Hook | When it fires | What it does |
+|------|--------------|-------------|
+| **SessionStart** | Session begins or resumes | Assigns agent name, sets terminal title, TTS greeting |
+| **UserPromptSubmit** | User sends a message | Caches prompt text for TTS, resets title emoji |
+| **PreToolUse** | Agent executes a tool | Clears the needs-input emoji, restores working state |
+| **Notification** | Permission prompt appears | Plays sound, speaks agent name, auto-focuses tab |
+| **Stop** | Agent finishes a turn | Sets done emoji, speaks "{name} completed {task}" |
+| **SessionEnd** | Session closes | Cleans up temp files, releases agent name back to pool |
+
+Platform handlers do the focus: AppleScript for Terminal.app/iTerm2, pane selection for tmux, file-watch for VS Code.
+
+<br />
+
+## Requirements
+
+- macOS (uses `say`, `afplay`, `osascript`)
+- A coding agent: [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [OpenCode](https://opencode.ai)
+
+<br />
+
+## What the Setup Script Does
 
 1. Copies hook scripts to `~/.claude/hooks/`
 2. Installs platform adapters for Terminal.app, iTerm2, tmux, and VS Code
@@ -72,7 +96,7 @@ The setup script installs the shell hooks to `~/.claude/hooks/` (shared with Cla
 5. Disables the coding agent's built-in title management (prevents conflicts)
 6. Asks if you want voice & sound alerts (optional)
 
-You can rerun `setup.sh` anytime to change your settings.
+Rerun `setup.sh` anytime to change your settings.
 
 ### VS Code Users
 
@@ -92,41 +116,31 @@ If you prefer to configure hooks manually instead of using the setup script, add
 {
   "hooks": {
     "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cat > /tmp/claude_start_$$; (cwd=$(jq -r .cwd < /tmp/claude_start_$$); sid=$(jq -r .session_id < /tmp/claude_start_$$); termpid=$(ps -o ppid= -p $PPID | tr -d ' '); echo \"pid:$termpid\" > /tmp/claude_term_pid_${sid}; rm /tmp/claude_start_$$) &"
-          }
-        ]
-      }
+      { "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/session-start.sh" }] }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/prompt-submit.sh" }] }
+    ],
+    "PreToolUse": [
+      { "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/pretooluse.sh" }] }
     ],
     "Notification": [
-      {
-        "matcher": "permission_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cat > /tmp/claude_hook_$$; sid=$(jq -r .session_id < /tmp/claude_hook_$$); (if [ -f /tmp/claude_term_pid_${sid} ]; then cat /tmp/claude_term_pid_${sid} > /tmp/claude-terminal-focus; fi; rm /tmp/claude_hook_$$) &"
-          }
-        ]
-      }
+      { "matcher": "permission_prompt", "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/notification.sh" }] }
     ],
     "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cat > /tmp/claude_stop_$$; sid=$(jq -r .session_id < /tmp/claude_stop_$$); (if [ -f /tmp/claude_term_pid_${sid} ]; then cat /tmp/claude_term_pid_${sid} > /tmp/claude-terminal-focus; fi; rm /tmp/claude_stop_$$) &"
-          }
-        ]
-      }
+      { "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/stop.sh" }] }
+    ],
+    "SessionEnd": [
+      { "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/session-end.sh" }] }
     ]
+  },
+  "env": {
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1"
   }
 }
 ```
 
-This is the minimal setup — just PID capture and focus, no agent names or TTS.
+<br />
 
 ## Usage
 
@@ -139,6 +153,8 @@ Once installed, Ahoy works automatically:
 ### Manual Focus (VS Code)
 
 Command Palette → **Ahoy: Focus Terminal** to manually select a terminal.
+
+<br />
 
 ## Customization
 
@@ -154,7 +170,7 @@ Toggle voice and sound alerts without re-running setup:
 |---------|-------------|
 | `bash ahoy/terminal/audio.sh off` | Mute — disables TTS and sound effects |
 | `bash ahoy/terminal/audio.sh on` | Unmute — re-enables TTS and sound effects |
-| `bash ahoy/terminal/audio.sh` | Interactive — detects whether audio is currently on or off, shows the status, and prompts you to toggle it |
+| `bash ahoy/terminal/audio.sh` | Interactive — detects current state and prompts to toggle |
 
 Changes take effect on the next hook trigger — no restart needed.
 
@@ -170,6 +186,8 @@ Create `~/.claude/hooks/platforms/<name>.sh` exporting two functions:
 - **`platform_focus`** `$label` `$sid` — called on permission prompts to bring the tab to front
 
 Then add a case to the `$TERM_PROGRAM` switch in `notification.sh` and `session-start.sh`.
+
+<br />
 
 ## Uninstall
 
@@ -188,6 +206,8 @@ bash ahoy/opencode/uninstall.sh
 ```
 
 This removes the OpenCode plugin only. Shell hooks in `~/.claude/hooks/` are left in place for Claude Code.
+
+<br />
 
 ## API
 
@@ -209,6 +229,8 @@ echo "pid:12345:notify" > /tmp/claude-terminal-focus
 # Focus with agent label and notification
 echo "pid:12345:label:Monte:notify" > /tmp/claude-terminal-focus
 ```
+
+<br />
 
 ## License
 
