@@ -5,7 +5,6 @@
 
   ### auto-focus terminal tabs across multi-agent coding sessions
 
-  hello
 
 </div>
 
