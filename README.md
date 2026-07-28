@@ -46,6 +46,7 @@ The setup script installs the shell hooks to `~/.claude/hooks/` (shared with Cla
 - **Tab states** — emoji prefixes show what each agent is doing: working, needs input, done
 - **Auto-focus** — permission prompts bring the correct tab to front
 - **Voice & sound alerts** — (optional) TTS speaks the agent name, Tink sound on prompts
+- **Voice tab focus** — (optional) say an agent name to focus its tab (`ahoy-voice`)
 
 <br />
 
@@ -57,8 +58,9 @@ The setup script installs the shell hooks to `~/.claude/hooks/` (shared with Cla
 | Emoji tab states | Yes | Yes | Yes | Yes |
 | Voice & sound alerts | Yes | Yes | Yes | Yes |
 | Auto-focus on permission prompt | AppleScript | AppleScript | tmux select-pane | Ahoy extension |
+| Voice tab focus (`ahoy-voice`) | Yes | Yes | — | — |
 
-Agent names, emoji states, and TTS work everywhere — they use standard escape sequences and macOS built-ins. Auto-focus is platform-specific: Terminal.app and iTerm2 use AppleScript, tmux uses `select-window`/`select-pane`, and VS Code uses the Ahoy extension.
+Agent names, emoji states, and TTS work everywhere — they use standard escape sequences and macOS built-ins. Auto-focus is platform-specific: Terminal.app and iTerm2 use AppleScript, tmux uses `select-window`/`select-pane`, and VS Code uses the Ahoy extension. Voice tab focus currently supports Terminal.app and iTerm2.
 
 <br />
 
@@ -77,12 +79,15 @@ Ahoy uses six hooks that fire at different points in the agent lifecycle:
 
 Platform handlers do the focus: AppleScript for Terminal.app/iTerm2, pane selection for tmux, file-watch for VS Code.
 
+Deeper lifecycle, name pool, and platform module details: [docs/architecture.md](docs/architecture.md).
+
 <br />
 
 ## Requirements
 
 - macOS (uses `say`, `afplay`, `osascript`)
 - A coding agent: [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [OpenCode](https://opencode.ai)
+- Optional voice tab focus: macOS 13+, Xcode CLT (`swift`), mic + speech recognition permission
 
 <br />
 
@@ -147,11 +152,27 @@ Once installed, Ahoy works automatically:
 
 1. Open multiple terminal tabs (or VS Code terminals)
 2. Start coding agent sessions in different tabs
-3. When Claude needs input, that tab automatically focuses
+3. When an agent needs input, that tab automatically focuses
 
 ### Manual Focus (VS Code)
 
 Command Palette → **Ahoy: Focus Terminal** to manually select a terminal.
+
+<br />
+
+## Voice Tab Focus
+
+Optional Swift tool that listens for agent names and focuses the matching Terminal.app or iTerm2 tab. Complements auto-focus — use when you want hands-free switching by voice.
+
+```bash
+cd ahoy/voice
+swift run ahoy-voice
+# optional platform override:
+swift run ahoy-voice -- --platform terminal
+swift run ahoy-voice -- --platform iterm2
+```
+
+On first run, grant microphone and speech recognition access. Active names are polled from `/tmp/claude_name_*` (same files the hooks write). Say a name (e.g. "Monte") to focus that tab. Ctrl+C stops listening.
 
 <br />
 
@@ -233,4 +254,4 @@ echo "pid:12345:label:Monte:notify" > /tmp/claude-terminal-focus
 
 ## License
 
-MIT
+[MIT](LICENSE)

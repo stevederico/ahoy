@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.0
+  Document voice tab focus
+  Link architecture docs
+
 ## 1.7.2
   Fix stop hook fd leak
 
